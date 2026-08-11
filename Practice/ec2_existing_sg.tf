@@ -1,0 +1,25 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "~access_key~"
+  secret_key = "~secret_key~"
+}
+
+data "aws_security_group" "launch_wizard_1" {
+  name = "launch-wizard-1"
+  vpc_id = "vpc-0ac5d6eb0f165b7fd"
+}
+
+resource "aws_instance" "demo" {
+  ami           = "ami-00d2dbb426772b03a"
+  instance_type = "t3.micro"
+  vpc_security_group_ids = [data.aws_security_group.launch_wizard_1.id]
+}
